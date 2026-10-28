@@ -19,6 +19,8 @@ docker compose up --build
 
 打开 `http://localhost:3000`。MySQL 初始化由 Flyway 自动执行，预置 6 个模板。第一次构建需要下载 Maven 和 npm 依赖。
 
+Java Docker 构建使用 `server/docker-settings.xml` 中的阿里云公开 Maven 镜像，以适配 Docker 容器无法直连 Maven Central 的网络环境；本地 Maven 与 GitHub Actions 仍使用各自默认配置。
+
 本地分开运行：先启动 MySQL，并创建 `atelier` 数据库和 `atelier` 用户（密码 `atelier`）；在 `server` 执行 `mvn spring-boot:run`，在 `web` 执行 `npm ci && npm run dev`。环境变量可覆盖 `DB_URL`、`DB_USER`、`DB_PASSWORD`、`STORAGE_DIR`、`STAGE_DELAY_MS`、`DEMO_FAILURE_ENABLED` 和 `API_INTERNAL_URL`。后端默认端口 8080，前端默认 3000。
 
 ## 测试与 CI
