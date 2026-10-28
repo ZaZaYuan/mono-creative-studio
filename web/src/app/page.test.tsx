@@ -9,6 +9,17 @@ const response = (data:unknown) => ({ok:true,json:async()=>data});
 afterEach(()=>{cleanup();vi.unstubAllGlobals();});
 
 describe('个人任务界面',()=>{
+  it('选择图片后显示预览并允许提交',async()=>{
+    vi.stubGlobal('fetch',vi.fn(async(input:string)=>input.includes('/templates')?response([template]):response([])));
+    vi.stubGlobal('URL',class extends URL {static createObjectURL(){return 'blob:demo'} static revokeObjectURL(){}});
+    render(<Home/>);
+    fireEvent.click(await screen.findByRole('button',{name:/毛茸茸的主角/}));
+    const file=new File(['image'],'demo.png',{type:'image/png'});
+    fireEvent.change(screen.getByLabelText('上传第 1 张图片'),{target:{files:[file]}});
+    await waitFor(()=>expect(screen.getByText('1 / 1')).toBeTruthy());
+    expect((screen.getByRole('button',{name:/开始创作/}) as HTMLButtonElement).disabled).toBe(false);
+  });
+
   it('同时保留两个任务各自的状态与错误',async()=>{
     vi.stubGlobal('fetch',vi.fn(async(input:string)=>input.includes('/templates')?response([template]):response([task('task-a','PROCESSING'),task('task-b','FAILED','模拟生成阶段失败')])));
     render(<Home/>);
