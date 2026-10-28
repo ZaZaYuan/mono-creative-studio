@@ -1,0 +1,8 @@
+web/node_modules/
+web/.next/
+web/tsconfig.tsbuildinfo
+server/target/
+server/storage/
+.env
+.local-mysql/
+.DS_Store

@@ -1,0 +1,40 @@
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: atelier
+      MYSQL_USER: atelier
+      MYSQL_PASSWORD: atelier
+      MYSQL_ROOT_PASSWORD: local-root-only
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  server:
+    build: ./server
+    environment:
+      DB_URL: jdbc:mysql://db:3306/atelier?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+      DB_USER: atelier
+      DB_PASSWORD: atelier
+      STORAGE_DIR: /app/storage
+      STAGE_DELAY_MS: 1800
+      DEMO_FAILURE_ENABLED: "true"
+    volumes:
+      - media_data:/app/storage
+    depends_on:
+      db:
+        condition: service_healthy
+  web:
+    build: ./web
+    environment:
+      API_INTERNAL_URL: http://server:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+volumes:
+  mysql_data:
+  media_data:

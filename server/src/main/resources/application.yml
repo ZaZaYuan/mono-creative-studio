@@ -1,0 +1,20 @@
+server:
+  port: ${PORT:8080}
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/atelier?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}
+    username: ${DB_USER:atelier}
+    password: ${DB_PASSWORD:atelier}
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 30MB
+  flyway:
+    enabled: true
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+app:
+  storage-dir: ${STORAGE_DIR:./storage}
+  stage-delay-ms: ${STAGE_DELAY_MS:1800}
+  demo-failure-enabled: ${DEMO_FAILURE_ENABLED:true}
