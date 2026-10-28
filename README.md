@@ -27,7 +27,7 @@ Java Docker 构建使用 `server/docker-settings.xml` 中的阿里云公开 Mave
 
 ```bash
 cd server && mvn test package
-cd web && npm ci && npm run lint && npm run typecheck && npm run build
+cd web && npm ci && npm run lint && npm run typecheck && npm run test && npm run build
 ```
 
 `.github/workflows/ci.yml` 在 push 和 pull request 时执行上述检查。验收时以提交链接中的 commit SHA 为准。
